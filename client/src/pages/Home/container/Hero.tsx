@@ -6,7 +6,7 @@ function Hero() {
   return (
     <section className="container mz-auto flex flex-col px-5 py-5 lg:flex-row">
       {/* -----------------------Section1--------------------------- */}
-      <div className="mt-10 lg:w-1/2">
+      <div className="fadeInLeftBig mt-10 lg:w-1/2">
         <h1 className="animate-fadeIn font-roboto text-3xl text-center font-bold text-dark-soft md:text-5xl lg:text-left lg:max-w-[540px]">
           Read the most interesing articles{" "}
         </h1>
