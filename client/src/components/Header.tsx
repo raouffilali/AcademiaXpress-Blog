@@ -21,6 +21,7 @@ const NavItemsInfo = [
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const NavItem = ({ item }: any) => {
   const [dropdown, setDropdown] = useState(false);
+
   const toggleDropdownHandler = () => {
     setDropdown((currState) => !currState);
   };
@@ -72,7 +73,7 @@ function Header() {
   };
 
   return (
-    <section>
+    <section className=" sticky top-0 right-0 left-0 z-50 ">
       <header className="container mx-auto px-5 flex py-4 justify-between items-center">
         <div>
           <img src={images.logo} alt="app Logo" />
