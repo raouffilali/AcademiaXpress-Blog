@@ -39,7 +39,10 @@ const NavItem = ({ item }: any) => {
         </>
       ) : (
         <div className="flex  flex-col items-center">
-          <button className="px-4 py-2 flex gap-x-1 items-center" onClick={toggleDropdownHandler}>
+          <button
+            className="px-4 py-2 flex gap-x-1 items-center"
+            onClick={toggleDropdownHandler}
+          >
             <span>{item.name}</span>
             <MdKeyboardArrowDown />
           </button>
@@ -73,10 +76,14 @@ function Header() {
   };
 
   return (
-    <section className=" sticky top-0 right-0 left-0 z-50 ">
+    <section className=" sticky top-0 right-0 left-0 z-50 bg-white">
       <header className="container mx-auto px-5 flex py-4 justify-between items-center">
         <div>
-          <img src={images.logo} alt="app Logo" />
+          <img
+            src={images.logo1}
+            alt="app Logo"
+            className="w-[90px] -translate-y-1 md:-translate-y-1 "
+          />
         </div>
         <div className=" lg:hidden z-50 ">
           {navIsVisible ? (
