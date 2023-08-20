@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { images } from "../constants";
+import { Link } from "react-router-dom";
 
 // interface NavItemProps {
 //   item: string;
@@ -38,27 +39,28 @@ const NavItem = ({ item }: any) => {
           </span>
         </>
       ) : (
-        <div className="flex  flex-col items-center">
+        <div className="flex  flex-col items-center ">
           <button
-            className="px-4 py-2 flex gap-x-1 items-center"
+            className="px-4 py-2 flex gap-x-1 items-center "
             onClick={toggleDropdownHandler}
           >
-            <span>{item.name}</span>
+            <span className=" " >{item.name}</span>
             <MdKeyboardArrowDown />
           </button>
           <div
             className={` ${
               dropdown ? "block" : "hidden"
-            } lg:hidden transition-all duration-500 pt-4 lg:absolute lg:bottom-0 lg:right-0 lg:transform lg:translate-y-full lg:group-hover:block w-max`}
+            }  rounded-b-lg lg:hidden transition-all duration-500 pt-4 lg:absolute lg:bottom-0 lg:right-0 lg:transform lg:translate-y-full lg:group-hover:block w-max`}
           >
             <ul className=" bg-dark-soft  lg:bg-transparent text-center flex flex-col shadow-lg rounded-lg overflow-hidden">
-              {item.items.map((page: string) => (
-                <a
-                  href="/"
-                  className=" hover:bg-dark-hard hover:text-white px-4 py-2 text-white lg:text-dark-soft "
+              {item.items.map((page: string, index: string) => (
+                <Link
+                  key={index}
+                  to="/"
+                  className=" hover:bg-dark-hard hover:text-white px-4 py-2 text-white lg:text-dark-soft lg:bg-white "
                 >
                   {page}
-                </a>
+                </Link>
               ))}
             </ul>
           </div>
@@ -76,7 +78,7 @@ function Header() {
   };
 
   return (
-    <section className=" sticky top-0 right-0 left-0 z-50 bg-white">
+    <section className=" sticky top-0 right-0 left-0 z-50 bg-white ">
       <header className="container mx-auto px-5 flex py-4 justify-between items-center">
         <div>
           <img
@@ -102,6 +104,7 @@ function Header() {
           className={` ${
             navIsVisible ? "right-0" : "-right-full"
           } transition-all duration-300  mt-[56px] lg:mt-0 bg-dark-hard lg:bg-transparent z-[49] flex flex-col w-full lg:w-auto justify-center lg:justify-end lg:flex-row fixed top-0 bottom-0 lg:static gap-x-9 items-center`}
+          style={{ zIndex: 1000 }}
         >
           <ul className="flex flex-col text-white items-center gap-y-5 lg:text-dark-soft lg:flex-row gap-x-2 font-semibold">
             {NavItemsInfo.map((item) => (
