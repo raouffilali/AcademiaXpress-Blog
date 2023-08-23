@@ -21,7 +21,7 @@ export default function CommentForm({btnLabel, formSubmitHandler}: CommentFormPr
       <div className="flex flex-col items-end border border-primary rounded-lg p-4">
         <textarea
           className="w-full focus:outline-none "
-          placeholder="Leave your comment here"
+          placeholder="Leave your comment here..."
           rows={5}
           value={value}
           onChange={(e) => setValue(e.target.value)}

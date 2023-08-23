@@ -2,9 +2,23 @@ import CommentForm from "./CommentForm";
 
 import { getCommentsData } from "../../data/comments";
 import { useEffect, useState } from "react";
+import Comment from "./Comment";
 
-interface CommentContainerProps {
+ interface CommentContainerProps {
   className?: string;
+  loggedinUserId: string
+}
+ export interface IComment {
+  _id: string;
+  user: {
+    _id: string;
+    name: string;
+  };
+  desc: string;
+  post: string;
+  parent: string | null;
+  replyOnUser: string | null;
+  createdAt: string;
 }
 interface addCommentHandlerProps {
   value: string;
@@ -12,22 +26,19 @@ interface addCommentHandlerProps {
   replyOnUser: string | null;
 }
 
-export const CommentContainer = ({ className }: CommentContainerProps) => {
-
-  const [comments, setComments] = useState([] as Array<object>);
-
+export const CommentContainer = ({ className, loggedinUserId }: CommentContainerProps) => {
+  const [comments, setComments] = useState<IComment[]>([]);
+  // filter comments that there parents are === null
+  const mainComment = comments.filter((comment) => comment.parent === null);
 
   console.log(comments);
 
   useEffect(() => {
-
-    ( async()=>{
+    (async () => {
       const commentData = await getCommentsData();
       setComments(commentData);
     })();
   }, []);
-
-
 
   const addCommentHandler = ({
     value,
@@ -41,7 +52,7 @@ export const CommentContainer = ({ className }: CommentContainerProps) => {
         _id: "a",
         name: "Mohammad Rezaii",
       },
-      desc:value,
+      desc: value,
       post: "1",
       parent: parent,
       replyOnUser: replyOnUser,
@@ -64,6 +75,13 @@ export const CommentContainer = ({ className }: CommentContainerProps) => {
           })
         }
       />
+      <div className="space-y-4 mt-8">
+        {mainComment.map((comment)=>(
+          <Comment commentData={comment} loggedinUserId={loggedinUserId}/>
+
+        ))}
+
+      </div>
     </div>
   );
 };
