@@ -109,7 +109,7 @@ function ArticleDetailPage() {
               lectus proin.
             </p>
           </div>
-          <CommentContainer className="mt-10" />
+          <CommentContainer className="mt-10" loggedinUserId="a"/>
         </article>
         {/* Last articles section with tags */}
         <SuggestedPosts
