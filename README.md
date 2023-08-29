@@ -1,4 +1,4 @@
-# EduEchoes-Blog
+# AcademiaXpress-Blog
 ## MERN Stack Blog App
 
 This is a simple MERN (MongoDB, Express.js, React, Node.js) stack blog application with JWT authentication and file upload using Multer.
