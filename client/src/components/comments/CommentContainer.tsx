@@ -77,7 +77,7 @@ export const CommentContainer = ({ className, loggedinUserId }: CommentContainer
       />
       <div className="space-y-4 mt-8">
         {mainComment.map((comment)=>(
-          <Comment commentData={comment} loggedinUserId={loggedinUserId}/>
+          <Comment key={comment._id} commentData={comment} loggedinUserId={loggedinUserId}/>
 
         ))}
 
