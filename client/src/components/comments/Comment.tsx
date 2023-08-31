@@ -1,17 +1,35 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
-import { IComment } from "./CommentContainer"; // Import the IComment interface
+import { IComment, addCommentHandlerProps } from "./CommentContainer"; // Import the IComment interface
 import { images } from "../../constants";
 import { FiMessageSquare, FiEdit2, FiTrash } from "react-icons/fi";
+import CommentForm from "./CommentForm";
 
+// Define the type for the addComment function
+type AddCommentType = (props: addCommentHandlerProps) => void;
 interface CommentProps {
   commentData: IComment; // Declare the type of the prop
   animationDelay?: number; // Declare animationDelay as an optional number prop
   loggedinUserId: string;
+  affectedComment?: any | null;
+  setAffectedComment?:
+    | React.Dispatch<React.SetStateAction<string | null | IComment>>
+    | any; // Correct the type
+  addComment: AddCommentType;
 }
 
-const Comment: React.FC<CommentProps> = ({ commentData, loggedinUserId }) => {
+const Comment: React.FC<CommentProps> = ({
+  commentData,
+  loggedinUserId,
+  affectedComment,
+  setAffectedComment,
+}) => {
   const isUserLoggedIn = Boolean(loggedinUserId);
   const commentBelongsToUser = loggedinUserId === commentData.user._id;
+  const isReplying =
+    affectedComment &&
+    affectedComment.type === "replying" &&
+    affectedComment._id === commentData._id;
 
   return (
     <div className="flex flex-nowrap items-start gap-x-3 bg-[#F2F4F5] p-3 rounded-lg">
@@ -38,7 +56,17 @@ const Comment: React.FC<CommentProps> = ({ commentData, loggedinUserId }) => {
         </p>
         <div className="flex items-center gap-3 text-dark-light font-roboto text-sm mt-3 mb-3">
           {isUserLoggedIn && (
-            <button className="flex items-center space-x-2">
+            <button
+              className="flex items-center space-x-2"
+              onClick={() => {
+                setAffectedComment
+                  ? setAffectedComment({
+                      type: "replying",
+                      _id: commentData._id,
+                    })
+                  : null;
+              }}
+            >
               <FiMessageSquare className="w-4 h-auto" />
               <span>Reply</span>
             </button>
@@ -57,6 +85,20 @@ const Comment: React.FC<CommentProps> = ({ commentData, loggedinUserId }) => {
             </>
           )}
         </div>
+        {isReplying && (
+          <CommentForm
+            btnLabel="Reply"
+            formSubmitHandler={(value) =>
+              setAffectedComment
+                ? setAffectedComment({
+                    type: "replying",
+                    _id: commentData._id,
+                    value: value,
+                  })
+                : null
+            }
+          />
+        )}
       </div>
     </div>
   );

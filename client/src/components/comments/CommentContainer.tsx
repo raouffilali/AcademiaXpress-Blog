@@ -4,11 +4,11 @@ import { getCommentsData } from "../../data/comments";
 import { useEffect, useState } from "react";
 import Comment from "./Comment";
 
- interface CommentContainerProps {
+interface CommentContainerProps {
   className?: string;
-  loggedinUserId: string
+  loggedinUserId: string;
 }
- export interface IComment {
+export interface IComment {
   _id: string;
   user: {
     _id: string;
@@ -20,16 +20,20 @@ import Comment from "./Comment";
   replyOnUser: string | null;
   createdAt: string;
 }
-interface addCommentHandlerProps {
+export interface addCommentHandlerProps {
   value: string;
   parent: string | null;
   replyOnUser: string | null;
 }
 
-export const CommentContainer = ({ className, loggedinUserId }: CommentContainerProps) => {
+export const CommentContainer = ({
+  className,
+  loggedinUserId,
+}: CommentContainerProps) => {
   const [comments, setComments] = useState<IComment[]>([]);
   // filter comments that there parents are === null
   const mainComment = comments.filter((comment) => comment.parent === null);
+  const [affectedComment, setAffectedComment] = useState<string | null>(null);
 
   console.log(comments);
 
@@ -76,11 +80,16 @@ export const CommentContainer = ({ className, loggedinUserId }: CommentContainer
         }
       />
       <div className="space-y-4 mt-8">
-        {mainComment.map((comment)=>(
-          <Comment key={comment._id} commentData={comment} loggedinUserId={loggedinUserId}/>
-
+        {mainComment.map((comment) => (
+          <Comment
+            key={comment._id}
+            commentData={comment}
+            loggedinUserId={loggedinUserId}
+            affectedComment={affectedComment}
+            setAffectedComment={setAffectedComment}
+            addComment={ addCommentHandler}
+          />
         ))}
-
       </div>
     </div>
   );
