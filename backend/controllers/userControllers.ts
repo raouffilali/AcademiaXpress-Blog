@@ -33,6 +33,7 @@ const registerUser = async (req, res, next) => {
       avatar: newUser.avatar,
       name: newUser.name,
       email: newUser.email,
+      password: newUser.password,
       verified: newUser.verified,
       admin: newUser.admin,
     };
@@ -46,7 +47,7 @@ const registerUser = async (req, res, next) => {
 };
 
 // login User
-export const loginUser = async (req, res, next) => {
+const loginUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
@@ -73,6 +74,7 @@ export const loginUser = async (req, res, next) => {
         avatar: user.avatar,
         name: user.name,
         email: user.email,
+        password: user.password,
         verified: user.verified,
         admin: user.admin,
       };
@@ -86,4 +88,4 @@ export const loginUser = async (req, res, next) => {
   }
 };
 
-export { registerUser };
+export { registerUser, loginUser };
