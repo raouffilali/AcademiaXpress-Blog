@@ -66,6 +66,18 @@ export const CommentContainer = ({
     setComments((currState) => [newComment, ...currState]);
   };
 
+  const updateCommentHandler = (value: string, commentId: string) => {
+    console.log(value, commentId);
+    // setComments function
+    setComments((currState) =>
+      currState.map((comment) =>
+        comment._id === commentId ? { ...comment, desc: value } : comment
+      )
+    );
+    setAffectedComment(null);
+    
+  };
+
   return (
     // Creating comment form
     <div className={`${className}`}>
@@ -87,7 +99,8 @@ export const CommentContainer = ({
             loggedinUserId={loggedinUserId}
             affectedComment={affectedComment}
             setAffectedComment={setAffectedComment}
-            addComment={ addCommentHandler}
+            addComment={addCommentHandler}
+            updateComment={updateCommentHandler}
           />
         ))}
       </div>

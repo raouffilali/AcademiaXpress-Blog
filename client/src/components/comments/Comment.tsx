@@ -5,7 +5,7 @@ import { images } from "../../constants";
 import { FiMessageSquare, FiEdit2, FiTrash } from "react-icons/fi";
 import CommentForm from "./CommentForm";
 
-// Define the type for the addComment function
+//* Define the type for the addComment function
 type AddCommentType = (props: addCommentHandlerProps) => void;
 interface CommentProps {
   commentData: IComment; // Declare the type of the prop
@@ -16,19 +16,33 @@ interface CommentProps {
     | React.Dispatch<React.SetStateAction<string | null | IComment>>
     | any; // Correct the type
   addComment: AddCommentType;
+  parentId?: string | null;
+  updateComment: (value: string, commentId: string) => void;
 }
 
+//* Define the Comment component
 const Comment: React.FC<CommentProps> = ({
   commentData,
   loggedinUserId,
   affectedComment,
   setAffectedComment,
+  parentId = null,
+  addComment,
+  updateComment,
 }) => {
   const isUserLoggedIn = Boolean(loggedinUserId);
   const commentBelongsToUser = loggedinUserId === commentData.user._id;
   const isReplying =
     affectedComment &&
     affectedComment.type === "replying" &&
+    affectedComment._id === commentData._id;
+  const repliedCommentId = parentId ? parentId : commentData._id;
+  const replyOnUserID = commentData.user._id;
+
+  // editing comment
+  const isEditing =
+    affectedComment &&
+    affectedComment.type === "editing" &&
     affectedComment._id === commentData._id;
 
   return (
@@ -54,6 +68,12 @@ const Comment: React.FC<CommentProps> = ({
         <p className="mt-[10px] text-dark-light font-opensans">
           {commentData.desc}
         </p>
+        {isEditing && (
+          <CommentForm
+            btnLabel="Edit"
+            formSubmitHandler={(value) => updateComment(value, commentData._id)}
+          />
+        )}
         <div className="flex items-center gap-3 text-dark-light font-roboto text-sm mt-3 mb-3">
           {isUserLoggedIn && (
             <button
@@ -74,7 +94,17 @@ const Comment: React.FC<CommentProps> = ({
 
           {commentBelongsToUser && (
             <>
-              <button className="flex items-center space-x-2">
+              <button
+                className="flex items-center space-x-2"
+                onClick={() => {
+                  setAffectedComment
+                    ? setAffectedComment({
+                        type: "editing",
+                        _id: commentData._id,
+                      })
+                    : null;
+                }}
+              >
                 <FiEdit2 className="w-4 h-auto" />
                 <span>Edit</span>
               </button>
@@ -89,14 +119,13 @@ const Comment: React.FC<CommentProps> = ({
           <CommentForm
             btnLabel="Reply"
             formSubmitHandler={(value) =>
-              setAffectedComment
-                ? setAffectedComment({
-                    type: "replying",
-                    _id: commentData._id,
-                    value: value,
-                  })
-                : null
+              addComment({
+                value,
+                parent: repliedCommentId,
+                replyOnUser: replyOnUserID,
+              } as addCommentHandlerProps)
             }
+            formCancelHandler={() => setAffectedComment(null)}
           />
         )}
       </div>
