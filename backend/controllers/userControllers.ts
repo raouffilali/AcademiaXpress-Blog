@@ -174,4 +174,19 @@ const getUsers = async (req, res, next) => {
   }
 };
 
-export { registerUser, loginUser, userProfile, updateProfile, getUsers };
+// updateProfilePicture
+const updateProfilePicture = async (req, res, next) => {
+  try {
+  } catch (error) {
+    next(error);
+  }
+};
+
+export {
+  registerUser,
+  loginUser,
+  userProfile,
+  updateProfile,
+  getUsers,
+  updateProfilePicture,
+};
