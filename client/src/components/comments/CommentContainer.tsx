@@ -51,7 +51,7 @@ export const CommentContainer = ({
   }: addCommentHandlerProps) => {
     console.log(value, parent, replyOnUser);
     const newComment = {
-      _id: "10",
+      _id: Math.random().toString(),
       user: {
         _id: "a",
         name: "Mohammad Rezaii",
@@ -60,10 +60,11 @@ export const CommentContainer = ({
       post: "1",
       parent: parent,
       replyOnUser: replyOnUser,
-      createdAt: "2022-12-31T17:22:05.092+0000",
+      createdAt: new Date().toISOString(),
     };
     // setComments function
     setComments((currState) => [newComment, ...currState]);
+    setAffectedComment(null);
   };
 
   const updateCommentHandler = (value: string, commentId: string) => {
@@ -75,9 +76,27 @@ export const CommentContainer = ({
       )
     );
     setAffectedComment(null);
-    
   };
 
+  const deleteCommentHandler = (commentId: string) => {
+    console.log(`delete comment with id: ${commentId}`);
+    // setComments function
+    setComments((currState) =>
+      currState.filter((comment) => comment._id !== commentId)
+    );
+  };
+
+  // get replies handler
+  const getRepliesHandler = (commentId: string) => {
+    console.log(`get replies for comment with id: ${commentId}`);
+    return comments
+      .filter((comment) => comment.parent === commentId)
+      .sort((a, b) => {
+        return (
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
+      });
+  };
   return (
     // Creating comment form
     <div className={`${className}`}>
@@ -101,6 +120,8 @@ export const CommentContainer = ({
             setAffectedComment={setAffectedComment}
             addComment={addCommentHandler}
             updateComment={updateCommentHandler}
+            deleteComment={deleteCommentHandler}
+            replies={getRepliesHandler(comment._id)}
           />
         ))}
       </div>

@@ -18,6 +18,8 @@ interface CommentProps {
   addComment: AddCommentType;
   parentId?: string | null;
   updateComment: (value: string, commentId: string) => void;
+  deleteComment: (commentId: string) => void;
+  replies: IComment[];
 }
 
 //* Define the Comment component
@@ -29,6 +31,8 @@ const Comment: React.FC<CommentProps> = ({
   parentId = null,
   addComment,
   updateComment,
+  deleteComment,
+  replies,
 }) => {
   const isUserLoggedIn = Boolean(loggedinUserId);
   const commentBelongsToUser = loggedinUserId === commentData.user._id;
@@ -65,13 +69,18 @@ const Comment: React.FC<CommentProps> = ({
             hour: "2-digit",
           })}
         </span>
-        <p className="mt-[10px] text-dark-light font-opensans">
-          {commentData.desc}
-        </p>
+        {!isEditing && (
+          <p className="mt-[10px] text-dark-light font-opensans">
+            {commentData.desc}
+          </p>
+        )}
+
         {isEditing && (
           <CommentForm
-            btnLabel="Edit"
+            btnLabel="Update"
             formSubmitHandler={(value) => updateComment(value, commentData._id)}
+            formCancelHandler={() => setAffectedComment(null)}
+            initialValue={commentData.desc}
           />
         )}
         <div className="flex items-center gap-3 text-dark-light font-roboto text-sm mt-3 mb-3">
@@ -108,7 +117,10 @@ const Comment: React.FC<CommentProps> = ({
                 <FiEdit2 className="w-4 h-auto" />
                 <span>Edit</span>
               </button>
-              <button className="flex items-center space-x-2">
+              <button
+                className="flex items-center space-x-2"
+                onClick={() => deleteComment(commentData._id)}
+              >
                 <FiTrash className="w-4 h-auto" />
                 <span>Delete</span>
               </button>
@@ -128,6 +140,21 @@ const Comment: React.FC<CommentProps> = ({
             formCancelHandler={() => setAffectedComment(null)}
           />
         )}
+        {replies!.length > 0 &&
+          replies!.map((reply) => (
+            <Comment
+              key={reply._id}
+              commentData={reply}
+              loggedinUserId={loggedinUserId}
+              affectedComment={affectedComment}
+              setAffectedComment={setAffectedComment}
+              addComment={addComment}
+              updateComment={updateComment}
+              deleteComment={deleteComment}
+              replies={[]}
+              parentId={commentData._id}
+            />
+          ))}
       </div>
     </div>
   );

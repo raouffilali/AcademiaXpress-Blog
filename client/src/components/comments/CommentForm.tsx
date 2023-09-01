@@ -6,14 +6,16 @@ interface CommentFormProps {
   btnLabel: string;
   formSubmitHandler: (value: string) => void;
   formCancelHandler?: (() => void) | null; // Adjust the type
+  initialValue?: string;
 }
 
 export default function CommentForm({
   btnLabel,
   formSubmitHandler,
   formCancelHandler = null,
+  initialValue = "",
 }: CommentFormProps) {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(initialValue);
 
   const submiHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
