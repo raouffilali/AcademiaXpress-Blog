@@ -31,18 +31,6 @@ export const authGuard = async (req, res, next) => {
     next(authError);
   }
 
-  // if (!req.headers.authorization) {
-  //   return res.status(401).json({ message: "Authorization header required" });
-  // }
-
-  // const token = req.headers.authorization.split(" ")[1];
-  // if (!token) {
-  //   return res.status(401).json({ message: "Authorization token required" });
-  // }
-
-  // const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  // req.user = decoded;
-  // next();
 };
 // Export the AuthenticationError class
 export { AuthenticationError as CustomError };
