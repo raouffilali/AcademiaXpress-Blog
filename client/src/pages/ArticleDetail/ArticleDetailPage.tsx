@@ -4,6 +4,7 @@ import MainLayout from "../../components/MainLayout";
 import { images } from "../../constants";
 import SuggestedPosts from "./container/SuggestedPosts";
 import { CommentContainer } from "../../components/comments/CommentContainer";
+import SocialShareButtons from "../../components/SocialShareButtons";
 
 const BreadCrumbsData = [
   {
@@ -98,8 +99,9 @@ function ArticleDetailPage() {
               congue mauris rhoncus aenean vel elit scelerisque. In egestas erat
               imperdiet sed euismod nisi porta lorem mollis. Morbi tristique
               senectus et netus. Mattis pellentesque id nibh tortor id aliquet
-              lectus proin.<br/><br/>
-
+              lectus proin.
+              <br />
+              <br />
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua.
               Egestas purus viverra accumsan in nisl nisi. Arcu cursus vitae
@@ -109,16 +111,27 @@ function ArticleDetailPage() {
               lectus proin.
             </p>
           </div>
-          <CommentContainer className="mt-10" loggedinUserId="a"/>
+          <CommentContainer className="mt-10" loggedinUserId="a" />
         </article>
-        {/* Last articles section with tags */}
-        <SuggestedPosts
-          header="Latest Article"
-          posts={postsData}
-          tags={tags}
-          className="mt-8 lg:mt-0 lg:max-w-xs "
-
-        />
+        <div>
+          {/* Last articles section with tags */}
+          <SuggestedPosts
+            header="Latest Article"
+            posts={postsData}
+            tags={tags}
+            className="mt-8 lg:mt-0 lg:max-w-xs "
+          />
+          <div className="mt-7">
+            <h2 className="font-robot font-medium text-dark-hard mb-4 md:text-xl">
+              Share on :
+            </h2>
+            <SocialShareButtons
+              url={encodeURI("https://github.com/raouffilali")}
+              title={encodeURIComponent("Abderraouf Filali's Github")}
+              
+            />
+          </div>
+        </div>
       </section>
     </MainLayout>
   );
