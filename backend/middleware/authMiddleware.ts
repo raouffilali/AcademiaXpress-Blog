@@ -44,3 +44,5 @@ export const authGuard = async (req, res, next) => {
   // req.user = decoded;
   // next();
 };
+// Export the AuthenticationError class
+export { AuthenticationError as CustomError };

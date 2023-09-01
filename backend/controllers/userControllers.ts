@@ -1,5 +1,15 @@
 import User from "../models/User";
 
+// Custom error class for endpoint not found
+class NotFoundError extends Error {
+  statusCode: number; // Add a statusCode property
+
+  constructor(message = "Endpoint not found", statusCode = 404) {
+    super(message);
+    this.statusCode = statusCode;
+  }
+}
+
 const registerUser = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
@@ -40,7 +50,6 @@ const registerUser = async (req, res, next) => {
 
     // Return the sanitized user data along with the token
     return res.status(201).json({ user: sanitizedUser, token });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error) {
     next(error);
   }
@@ -61,7 +70,7 @@ const loginUser = async (req, res, next) => {
     // Check if the user already exists
     const user = await User.findOne({ email });
     if (!user) {
-      throw new Error("Email does not exist");
+      throw new NotFoundError("Email does not exist", 404);
     }
 
     if (await user.comparePassword(password)) {
@@ -88,4 +97,28 @@ const loginUser = async (req, res, next) => {
   }
 };
 
-export { registerUser, loginUser };
+const userProfile = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (user) {
+      // Respond with a sanitized user object (omit sensitive fields)
+      const sanitizedUser = {
+        _id: user._id,
+        avatar: user.avatar,
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        verified: user.verified,
+        admin: user.admin,
+      };
+      // Return the sanitized user data along with the token
+      return res.status(201).json({ user: sanitizedUser });
+    } else {
+      throw new NotFoundError("User not found", 404);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { registerUser, loginUser, userProfile };

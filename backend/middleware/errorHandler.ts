@@ -1,11 +1,3 @@
-// export const errorResponserHandler = (err, req, res, next) => {
-//   const statusCode = err.statusCode || 400;
-//   res.status(statusCode).json({
-//     message: err.message,
-//     stack: process.env.MODE_ENV === "production" ? null : err.stack,
-//   });
-// };
-
 import log4js from "log4js";
 
 // Configure Log4js with your desired settings
@@ -53,13 +45,13 @@ export const errorResponseHandler = (err, req, res, next) => {
 
 // Custom error class for endpoint not found
 class NotFoundError extends Error {
-    statusCode: number; // Add a statusCode property
+  statusCode: number; // Add a statusCode property
 
-    constructor(message = "Endpoint not found", statusCode = 404) {
-      super(message);
-      this.statusCode = statusCode;
-    }
+  constructor(message = "Endpoint not found", statusCode = 404) {
+    super(message);
+    this.statusCode = statusCode;
   }
+}
 // Middleware for handling "Endpoint not found" errors
 export const invalidPathHandler = (req, res, next) => {
   next(new NotFoundError("Endpoint not found", 404)); // Pass the status code
