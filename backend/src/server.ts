@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import connectDB from "../config/db";
-import env from "../utils/validateEnv";
+// import env from "../utils/validateEnv";
 
 dotenv.config();
 
