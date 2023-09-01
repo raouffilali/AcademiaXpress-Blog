@@ -1,4 +1,6 @@
+import uploadPicture from "../middleware/uploadPictureMiddleware";
 import User from "../models/User";
+import fileRemover from "../utils/fileRemover";
 
 // Custom error class for endpoint not found
 class NotFoundError extends Error {
@@ -177,6 +179,64 @@ const getUsers = async (req, res, next) => {
 // updateProfilePicture
 const updateProfilePicture = async (req, res, next) => {
   try {
+    const upload = uploadPicture.single("profilePicture");
+    upload(req, res, async (err) => {
+      if (err) {
+        const error = new Error(
+          "An unknown error occurred when uploading!" + err.message
+        );
+        return next(error);
+      } else {
+        // everything went fine
+        if (req.file) {
+          const updatedUser = await User.findById(req.user._id);
+          const filename = updatedUser!.avatar;
+          if(filename){
+            fileRemover(filename);
+          }
+          updatedUser!.avatar = req.file.filename;
+          await updatedUser!.save();
+          // Generate a JWT token
+          const token = await updatedUser!.generateJWT();
+
+          // Respond with a sanitized user object (omit sensitive fields)
+          const sanitizedUser = {
+            _id: updatedUser!._id,
+            avatar: updatedUser!.avatar,
+            name: updatedUser!.name,
+            email: updatedUser!.email,
+            password: updatedUser!.password,
+            verified: updatedUser!.verified,
+            admin: updatedUser!.admin,
+          };
+          // Return the sanitized user data along with the token
+          return res.status(201).json({ user: sanitizedUser, token });
+        } else {
+          const updatedUser = await User.findById(req.user._id);
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const filename = updatedUser!.avatar;
+          updatedUser!.avatar = "";
+          await updatedUser!.save();
+          fileRemover(filename);
+
+          // Generate a JWT token
+          const token = await updatedUser!.generateJWT();
+
+          // Respond with a sanitized user object (omit sensitive fields)
+          const sanitizedUser = {
+            _id: updatedUser!._id,
+            avatar: updatedUser!.avatar,
+            name: updatedUser!.name,
+            email: updatedUser!.email,
+            password: updatedUser!.password,
+            verified: updatedUser!.verified,
+            admin: updatedUser!.admin,
+          };
+          // Return the sanitized user data along with the token
+          return res.status(201).json({ user: sanitizedUser, token });
+        }
+      }
+    });
   } catch (error) {
     next(error);
   }

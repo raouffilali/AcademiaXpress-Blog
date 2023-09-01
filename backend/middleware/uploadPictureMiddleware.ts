@@ -16,21 +16,26 @@ const uploadPicture = multer({
     fileSize: 1024 * 1024 * 5, // 5MB
   },
   fileFilter: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
+    // ? method1
+    const fileTypes = /jpeg|jpg|png/;
+    const extName = fileTypes.test(
+      file.originalname.split(".")[file.originalname.split(".").length - 1]
+    );
+    const mimeType = fileTypes.test(file.mimetype);
+    if (extName && mimeType) {
+      cb(null, true);
+    } else {
+      cb(new Error("Only support .jpg, .jpeg, .png"));
+    }
+
+    // --------------------------------------------------------------------
+    // ? method2
+    /* const ext = path.extname(file.originalname);
     if (ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png") {
       return cb(new Error("Only support .jpg, .jpeg, .png"));
     }
-
-    // const fileTypes = /jpeg|jpg|png/;
-    // const extName = fileTypes.test(
-    //   file.originalname.split(".")[file.originalname.split(".").length - 1]
-    // );
-    // const mimeType = fileTypes.test(file.mimetype);
-    // if (extName && mimeType) {
-    //   cb(null, true);
-    // } else {
-    //   cb(new Error("Only support .jpg, .jpeg, .png"));
-    // }
+    cb(null, true);*/
+    // --------------------------------------------------------------------
   },
 });
 
